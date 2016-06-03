@@ -1,0 +1,2 @@
+
+-DCATKIN_DEVEL_PREFIX=/home/federico/catkin_ws/devel -DCMAKE_INSTALL_PREFIX=/home/federico/catkin_ws/install -G Unix Makefiles
