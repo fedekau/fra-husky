@@ -1,0 +1,8 @@
+prefix=/home/federico/catkin_ws/install
+
+Name: laboratorio3
+Description: Description of laboratorio3
+Version: 0.0.0
+Cflags: 
+Libs: -L/home/federico/catkin_ws/install/lib 
+Requires: 

@@ -1,0 +1,10 @@
+<launch>
+  <!-- We resume the logic in empty_world.launch, changing only the name of the world to be launched -->
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="world_name" value="$(find laboratorio3)/worlds/clearpath_playpen.world"/>
+    <!-- more default parameters can be changed here -->
+  </include>
+
+  <include file="$(find husky_gazebo)/launch/spawn_husky.launch"></include>
+  <include file="$(find husky_viz)/launch/view_robot.launch"></include>
+</launch>
