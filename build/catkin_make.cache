@@ -1,2 +1,2 @@
 laboratorio3
--DCATKIN_DEVEL_PREFIX=/home/federico/catkin_ws/devel -DCMAKE_INSTALL_PREFIX=/home/federico/catkin_ws/install -G Unix Makefiles
+-DCATKIN_DEVEL_PREFIX=/home/guille/Fing/fra/fra-husky/devel -DCMAKE_INSTALL_PREFIX=/home/guille/Fing/fra/fra-husky/install -G Unix Makefiles
