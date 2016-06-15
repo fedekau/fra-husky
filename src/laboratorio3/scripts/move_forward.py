@@ -11,7 +11,7 @@ def talker():
 	rate = rospy.Rate(10) # 10hz
 	
 	while not rospy.is_shutdown():
-		twist = Twist(Vector3(-1.0,0,0),Vector3(0,0,0.2))
+		twist = Twist(Vector3(0,0,0),Vector3(0,0,0))
 		pub.publish(twist)
 		rate.sleep()
 
