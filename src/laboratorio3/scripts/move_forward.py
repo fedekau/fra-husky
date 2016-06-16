@@ -1,9 +1,7 @@
 #!/usr/bin/env python
-
 import rospy
+from explorer import Explorer
 from std_msgs.msg import String
-from geometry_msgs.msg import Twist
-from geometry_msgs.msg import Vector3
 
 def talker():
 	pub = rospy.Publisher('/cmd_vel', Twist , queue_size=10)
@@ -15,8 +13,18 @@ def talker():
 		pub.publish(twist)
 		rate.sleep()
 
+
 if __name__ == '__main__':
 	try:
-		talker()
+		rospy.init_node('move_forward', anonymous = False)
+
+		randomExplorer = Explorer()
+
+		rospy.Subscriber("/laboratorio3/exploration", String, randomExplorer.callback)
+
+		randomExplorer.navigate()
+
+		rospy.spin()
+
 	except rospy.ROSInterruptException:
-		pass
+    		rospy.loginfo("Ctrl-C caught. Quitting")

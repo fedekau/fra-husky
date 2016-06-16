@@ -1,0 +1,16 @@
+<launch>
+  <!-- We resume the logic in empty_world.launch, changing only the name of the world to be launched -->
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="world_name" value="$(find laboratorio3)/worlds/conos_contra_pared.world"/>
+    <!-- more default parameters can be changed here -->
+  </include>
+
+  <include file="$(find husky_gazebo)/launch/spawn_husky.launch">
+	  <arg name="laser_enabled" value="true"/>
+	  <arg name="ur5_enabled" value="false"/>
+	  <arg name="kinect_enabled" value="true"/>
+  </include>
+  <include file="$(find husky_viz)/launch/view_robot.launch"></include>
+  <include file="$(find husky_navigation)/launch/move_base_mapless_demo.launch"></include>
+  <node name="move_forward" pkg="laboratorio3" type="move_forward.py" output="screen"></node>
+</launch>
