@@ -79,7 +79,7 @@ class App:
         self.tracker.add_target(self.frame, rect)
 
     def run(self):
-        while True:
+        while not rospy.is_shutdown():
             playing = not self.paused and not self.rect_sel.dragging
             if playing or self.frame is None:
 		#print(self.cv_image)
