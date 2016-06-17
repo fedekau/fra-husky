@@ -47,6 +47,7 @@ class Explorer():
 
 	def callback(self, data):
     		if data.data == "STOP":
+			self.move_base.cancel_goal()
 			rospy.loginfo("Exploration has stopped")
 			self.explore = False
 		if data.data == "START":
