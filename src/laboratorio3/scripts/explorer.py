@@ -51,7 +51,6 @@ class Explorer():
 			rospy.loginfo("Exploration has stopped")
 			self.explore = False
 		if data.data == "START":
-			rospy.loginfo("Exploration has started")
 			self.explore = True
 
 	def is_exploring(self):
