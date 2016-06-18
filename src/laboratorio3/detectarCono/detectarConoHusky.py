@@ -82,6 +82,8 @@ class App:
 
 	self.pubVel = rospy.Publisher('/cmd_vel', Twist , queue_size=10)
 	self.pubNavegacion = rospy.Publisher('/laboratorio3/exploration', String , queue_size=10)
+
+	self.reiniciar_exploracion_timer = False
 	#rospy.init_node('talker', anonymous=True)
 
     def callback(self,data):
@@ -127,8 +129,13 @@ class App:
 		with open(frameFile, 'rb') as f:
 			frame = pickle.load(f)
 		self.tracker.add_target(frame, rectangulo)
+	
+    def reiniciar_exploracion(self, event):
+	self.reiniciar_exploracion_timer = False
+	self.pubNavegacion.publish('START')
 
     def run(self):
+	direccion = None
         while not rospy.is_shutdown():
             playing = not self.paused and not self.rect_sel.dragging
             if playing or self.frame is None:
@@ -157,10 +164,11 @@ class App:
             if playing:
                 tracked = self.tracker.track(self.frame)
                 if len(tracked) > 0:
-		    #print('CANTIDAD DE OBJETOS DETECTADOS:')
-		    #print(len(tracked))
 		    tracked = tracked[0]
-		    self.pubNavegacion.publish('STOP')
+		    if not self.reiniciar_exploracion_timer:
+		    	self.pubNavegacion.publish('STOP')
+			self.reiniciar_exploracion_timer = True
+		    	rospy.Timer(rospy.Duration(15), self.reiniciar_exploracion)
 		    #Aca se imprimen los 4 puntos que genera
 		    #print(str(np.int32(tracked.quad[0])))
 		    #print(str(np.int32(tracked.quad[1])))
@@ -169,19 +177,17 @@ class App:
 		    #Este es el punto medio del poligono que genera. 
 		    ptoMedio = (np.int32(tracked.quad[0]) + np.int32(tracked.quad[1]) + np.int32(tracked.quad[2]) + np.int32(tracked.quad[3]))/4
 		    direccion = (ptoMedio[0]-320)/-320.0
-		    altura = np.int32(tracked.quad[2])[1] - np.int32(tracked.quad[1])[1]
-		    avanzar = 0
-		    if (altura < 280):
-			avanzar = 0.3
-		    print(altura)
-		    twist = Twist(Vector3(avanzar,0,0),Vector3(0,0,direccion/2.0))
+		    twist = Twist(Vector3(15,0,0),Vector3(0,0,direccion))
 		    self.pubVel.publish(twist)
+		    
                     cv2.polylines(vis, [np.int32(tracked.quad)], True, (255, 255, 255), 2)
                     for (x0, y0), (x1, y1) in zip(np.int32(tracked.p0), np.int32(tracked.p1)):
                         cv2.line(vis, (x0+w, y0), (x1, y1), (0, 255, 0))
 		else:
-		    self.pubNavegacion.publish('START')
-		    #print('No detecto cono')
+		    if self.reiniciar_exploracion_timer:
+			direccion = direccion or 0.5
+		    	twist = Twist(Vector3(0 if direccion > 0.2 else 10,0,0),Vector3(0,0, direccion if direccion > 0.2 else 0))
+		    	self.pubVel.publish(twist)
 
             draw_keypoints(vis, self.tracker.frame_points)
 	    
