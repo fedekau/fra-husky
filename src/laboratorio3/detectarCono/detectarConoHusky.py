@@ -37,12 +37,14 @@ from plane_tracker import PlaneTracker
 
 from cv_bridge import CvBridge, CvBridgeError
 import rospy
+import rospkg
 from sensor_msgs.msg import Image
 from std_msgs.msg import String
 from geometry_msgs.msg import Twist
 from geometry_msgs.msg import Vector3
 import pickle
-
+import sys
+import os
 
 class App:
     def __init__(self, src):
@@ -61,21 +63,21 @@ class App:
         self.rect_sel = common.RectSelector('plane', self.on_rect)
 	
 	self.tracker.clear()
-	with open('rectCercano.pkl', 'rb') as f:
-		rectangulo = pickle.load(f)
-	with open('frameCercano.pkl', 'rb') as f:
-		frame = pickle.load(f)
-	self.tracker.add_target(frame, rectangulo)
-	with open('rectMedio.pkl', 'rb') as f:
-		rectangulo = pickle.load(f)
-	with open('frameMedio.pkl', 'rb') as f:
-		frame = pickle.load(f)
-	self.tracker.add_target(frame, rectangulo)
-	with open('rectLejano.pkl', 'rb') as f:
-		rectangulo = pickle.load(f)
-	with open('frameLejano.pkl', 'rb') as f:
-		frame = pickle.load(f)
-	self.tracker.add_target(frame, rectangulo)
+
+	rospack = rospkg.RosPack()	
+	labPath = rospack.get_path('laboratorio3')
+
+	files = ['Cercano', 'Medio', 'Lejano']
+	
+	for f in files:
+		rectanguloFile = os.path.join(labPath, 'detectarCono/rect{}.pkl'.format(f))
+		frameFile = os.path.join(labPath, 'detectarCono/frame{}.pkl'.format(f))
+
+		with open(rectanguloFile, 'rb') as f:
+			rectangulo = pickle.load(f)
+		with open(frameFile, 'rb') as f:
+			frame = pickle.load(f)
+		self.tracker.add_target(frame, rectangulo)
 
 	self.pubVel = rospy.Publisher('/cmd_vel', Twist , queue_size=10)
 	self.pubNavegacion = rospy.Publisher('/laboratorio3/exploration', String , queue_size=10)
@@ -109,21 +111,21 @@ class App:
 	#with open('frameLejano.pkl', 'wb') as f:
 	#	pickle.dump(self.frame, f, pickle.HIGHEST_PROTOCOL)
 	self.tracker.clear()
-	with open('rectCercano.pkl', 'rb') as f:
-		rectangulo = pickle.load(f)
-	with open('frameCercano.pkl', 'rb') as f:
-		frame = pickle.load(f)
-	self.tracker.add_target(frame, rectangulo)
-	with open('rectMedio.pkl', 'rb') as f:
-		rectangulo = pickle.load(f)
-	with open('frameMedio.pkl', 'rb') as f:
-		frame = pickle.load(f)
-	self.tracker.add_target(frame, rectangulo)
-	with open('rectLejano.pkl', 'rb') as f:
-		rectangulo = pickle.load(f)
-	with open('frameLejano.pkl', 'rb') as f:
-		frame = pickle.load(f)
-	self.tracker.add_target(frame, rectangulo)
+
+	rospack = rospkg.RosPack()	
+	labPath = rospack.get_path('laboratorio3')
+
+	files = ['Cercano', 'Medio', 'Lejano']
+	
+	for f in files:
+		rectanguloFile = os.path.join(labPath, 'detectarCono/rect{}.pkl'.format(f))
+		frameFile = os.path.join(labPath, 'detectarCono/frame{}.pkl'.format(f))
+
+		with open(rectanguloFile, 'rb') as f:
+			rectangulo = pickle.load(f)
+		with open(frameFile, 'rb') as f:
+			frame = pickle.load(f)
+		self.tracker.add_target(frame, rectangulo)
 	
 
     def run(self):
@@ -196,7 +198,6 @@ class App:
 if __name__ == '__main__':
     print(__doc__)
 
-    import sys
     try:
         video_src = sys.argv[1]
     except:
