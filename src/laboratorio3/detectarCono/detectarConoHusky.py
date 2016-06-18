@@ -56,6 +56,7 @@ class App:
 	#this.im = np.ndarray(shape=(480, 640, n_channels), dtype=dtype)
 	self.cv_image = None
         self.frame = None
+	#self.count = 1
         self.paused = False
         self.tracker = PlaneTracker()
 
@@ -67,12 +68,12 @@ class App:
 	rospack = rospkg.RosPack()	
 	labPath = rospack.get_path('laboratorio3')
 
-	files = ['Cercano', 'Medio', 'Lejano']
+	files = ['Cercano', 'Medio', 'Lejano','1','2','3','4','5','6','7','8','9','10','11','12','13','14','15']
 	
 	for f in files:
 		rectanguloFile = os.path.join(labPath, 'detectarCono/rect{}.pkl'.format(f))
 		frameFile = os.path.join(labPath, 'detectarCono/frame{}.pkl'.format(f))
-
+	
 		with open(rectanguloFile, 'rb') as f:
 			rectangulo = pickle.load(f)
 		with open(frameFile, 'rb') as f:
@@ -86,7 +87,6 @@ class App:
     def callback(self,data):
         try:
 	    self.cv_image = self.bridge.imgmsg_to_cv2(data, "bgr8")
-	
 	    #print(self.cv_image)
         except CvBridgeError as e:
             print(e)
@@ -106,27 +106,27 @@ class App:
         #self.tracker.clear()
         #self.tracker.add_target(self.frame, rect)
 	#print('ON_RECT')
-	#with open('rectLejano.pkl', 'wb') as f:
+	#with open('rect'+str(self.count)+'.pkl', 'wb') as f:
 	#	pickle.dump(rect, f, pickle.HIGHEST_PROTOCOL)
-	#with open('frameLejano.pkl', 'wb') as f:
+	#with open('frame'+str(self.count)+'.pkl', 'wb') as f:
 	#	pickle.dump(self.frame, f, pickle.HIGHEST_PROTOCOL)
+	#self.count = self.count + 1
 	self.tracker.clear()
 
 	rospack = rospkg.RosPack()	
 	labPath = rospack.get_path('laboratorio3')
 
-	files = ['Cercano', 'Medio', 'Lejano']
+	files = ['Cercano', 'Medio', 'Lejano','1','2','3','4','5','6','7','8','9','10','11','12','13','14','15']
 	
 	for f in files:
 		rectanguloFile = os.path.join(labPath, 'detectarCono/rect{}.pkl'.format(f))
 		frameFile = os.path.join(labPath, 'detectarCono/frame{}.pkl'.format(f))
-
+	
 		with open(rectanguloFile, 'rb') as f:
 			rectangulo = pickle.load(f)
 		with open(frameFile, 'rb') as f:
 			frame = pickle.load(f)
 		self.tracker.add_target(frame, rectangulo)
-	
 
     def run(self):
         while not rospy.is_shutdown():
@@ -157,8 +157,8 @@ class App:
             if playing:
                 tracked = self.tracker.track(self.frame)
                 if len(tracked) > 0:
-		    print('CANTIDAD DE OBJETOS DETECTADOS:')
-		    print(len(tracked))
+		    #print('CANTIDAD DE OBJETOS DETECTADOS:')
+		    #print(len(tracked))
 		    tracked = tracked[0]
 		    self.pubNavegacion.publish('STOP')
 		    #Aca se imprimen los 4 puntos que genera
@@ -174,7 +174,7 @@ class App:
 		    if (altura < 280):
 			avanzar = 0.3
 		    print(altura)
-		    twist = Twist(Vector3(avanzar,0,0),Vector3(0,0,direccion))
+		    twist = Twist(Vector3(avanzar,0,0),Vector3(0,0,direccion/2.0))
 		    self.pubVel.publish(twist)
                     cv2.polylines(vis, [np.int32(tracked.quad)], True, (255, 255, 255), 2)
                     for (x0, y0), (x1, y1) in zip(np.int32(tracked.p0), np.int32(tracked.p1)):

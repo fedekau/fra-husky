@@ -48,7 +48,7 @@ flann_params= dict(algorithm = FLANN_INDEX_LSH,
                    key_size = 12,     # 20
                    multi_probe_level = 1) #2
 
-MIN_MATCH_COUNT = 10
+MIN_MATCH_COUNT = 7
 
 '''
   image     - image to track

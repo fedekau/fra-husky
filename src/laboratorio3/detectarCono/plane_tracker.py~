@@ -48,7 +48,7 @@ flann_params= dict(algorithm = FLANN_INDEX_LSH,
                    key_size = 12,     # 20
                    multi_probe_level = 1) #2
 
-MIN_MATCH_COUNT = 10
+MIN_MATCH_COUNT = 7
 
 '''
   image     - image to track
@@ -70,7 +70,7 @@ TrackedTarget = namedtuple('TrackedTarget', 'target, p0, p1, H, quad')
 
 class PlaneTracker:
     def __init__(self):
-        self.detector = cv2.ORB( nfeatures = 1000 )
+        self.detector = cv2.ORB_create( nfeatures = 1000 )
         self.matcher = cv2.FlannBasedMatcher(flann_params, {})  # bug : need to pass empty dict (#1329)
         self.targets = []
         self.frame_points = []
