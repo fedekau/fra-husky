@@ -177,8 +177,8 @@ class App:
                     cv2.polylines(vis, [np.int32(tracked.quad)], True, (255, 255, 255), 2)
                     for (x0, y0), (x1, y1) in zip(np.int32(tracked.p0), np.int32(tracked.p1)):
                         cv2.line(vis, (x0+w, y0), (x1, y1), (0, 255, 0))
-		else:
-		    self.pubNavegacion.publish('START')
+		#else:
+		    #self.pubNavegacion.publish('START')
 		    #print('No detecto cono')
 
             draw_keypoints(vis, self.tracker.frame_points)
