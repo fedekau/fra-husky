@@ -59,8 +59,8 @@ class Explorer():
 	def navigate(self):
 		while not rospy.is_shutdown():
 			if self.is_exploring():
-				x = random.uniform(-10.0, 10.0)
-				y = random.uniform(-10.0, 10.0)
+				x = random.uniform(-9.0, 9.0)
+				y = random.uniform(-9.0, 9.0)
 				w = random.uniform(-5.0, 5.0)
 				pose = {'x': x, 'y': y}
                 		angle = {'r1': 0.000,'r2': 0.000,'r3': 0.000,'r4': w}
