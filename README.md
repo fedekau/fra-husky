@@ -15,4 +15,4 @@ The software used:
 
 After installing all the dependencies the simulation can be run with:
 
-`rosrun laboratorio3 laboratorio3.launch`
+`roslaunch laboratorio3 laboratorio3.launch`
